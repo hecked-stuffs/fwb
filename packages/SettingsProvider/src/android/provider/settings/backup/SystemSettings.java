@@ -112,5 +112,8 @@ public class SystemSettings {
         Settings.System.QS_FOOTER_TEXT_STRING,
         Settings.System.STATUS_BAR_NOTIF_COUNT,
         Settings.System.SENSOR_BLOCK,
+        Settings.System.OMNIJAWS_WEATHER_ICON_PACK,
+        Settings.System.OMNI_LOCKSCREEN_WEATHER_ENABLED,
+        Settings.System.LOCKSCREEN_WEATHER_STYLE,
     };
 }
