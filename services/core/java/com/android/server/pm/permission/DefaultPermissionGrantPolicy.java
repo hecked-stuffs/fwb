@@ -34,6 +34,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageManagerInternal;
+import android.content.pm.PackageParser;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
@@ -68,6 +69,7 @@ import android.util.Xml;
 import com.android.internal.R;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.XmlUtils;
+import com.android.internal.util.spark.OmniJawsClient;
 import com.android.server.LocalServices;
 import com.android.server.ServiceThread;
 import com.android.server.pm.KnownPackages;
@@ -989,6 +991,11 @@ final class DefaultPermissionGrantPolicy {
 
         // DownloadProviders
         grantSystemFixedPermissionsToSystemPackage(pm,"com.android.providers.downloads.DownloadProvider", userId, STORAGE_PERMISSIONS);
+
+        // OmniJaws
+        String omnijawsServicePackageName = "org.omnirom.omnijaws";
+        grantSystemFixedPermissionsToSystemPackage(pm, omnijawsServicePackageName, userId, ALWAYS_LOCATION_PERMISSIONS);
+
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
