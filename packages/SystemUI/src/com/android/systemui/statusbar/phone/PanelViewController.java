@@ -1169,6 +1169,7 @@ public abstract class PanelViewController {
 
     public void setIsLaunchAnimationRunning(boolean running) {
         mIsLaunchAnimationRunning = running;
+        mCentralSurfaces.updateDismissAllVisibility(false);
     }
 
     protected void setIsClosing(boolean isClosing) {
