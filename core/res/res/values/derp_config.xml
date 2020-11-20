@@ -100,6 +100,8 @@
   <!-- Whether key handler sends intent when changing slider position -->
   <string name="config_alertSliderIntent"></string>
 
+  <!-- Does the device support battery LED? -->
+  <bool name="config_intrusiveBatteryLed">false</bool>
   <!-- Does the battery LED support multiple colors?
        Used to decide if the user can change the colors -->
   <bool name="config_multiColorBatteryLed">false</bool>
