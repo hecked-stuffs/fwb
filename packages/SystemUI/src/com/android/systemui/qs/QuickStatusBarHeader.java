@@ -577,10 +577,12 @@ public class QuickStatusBarHeader extends FrameLayout implements
                 mStatusBarPaddingTop,
                 mHeaderPaddingRight + mStatusBarPaddingEnd,
                 0);
+/*
         mStatusIconsView.setPadding(0,
                 mStatusBarPaddingTop,
                 0,
                 0);
+*/
     }
 
     public void updateEverything() {
