@@ -769,7 +769,7 @@ interface IActivityManager {
     /**
      *  Force full screen for devices with cutout
      */
-    boolean shouldForceCutoutFullscreen(in String packageName); =======
+    boolean shouldForceCutoutFullscreen(in String packageName);
 
     /**
      * Sets scale value for package in DSS list
