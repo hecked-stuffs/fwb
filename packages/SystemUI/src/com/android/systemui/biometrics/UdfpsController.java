@@ -32,6 +32,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Point;
 import android.hardware.biometrics.BiometricFingerprintConstants;
+import android.hardware.display.ColorDisplayManager;
 import android.hardware.display.DisplayManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.hardware.fingerprint.IUdfpsOverlayController;
@@ -170,6 +171,9 @@ public class UdfpsController implements DozeReceiver {
     private final Set<Callback> mCallbacks = new HashSet<>();
     private final int mUdfpsVendorCode;
 
+    private boolean mNightModeActive;
+    private int mAutoModeState;
+
     @VisibleForTesting
     public static final VibrationAttributes VIBRATION_ATTRIBUTES =
             new VibrationAttributes.Builder()
@@ -201,6 +205,7 @@ public class UdfpsController implements DozeReceiver {
         @Override
         public void showUdfpsOverlay(long requestId, int sensorId, int reason,
                 @NonNull IUdfpsOverlayControllerCallback callback) {
+            disableNightMode();
             mFgExecutor.execute(() -> UdfpsController.this.showUdfpsOverlay(
                     new UdfpsControllerOverlay(mContext, mFingerprintManager, mInflater,
                             mWindowManager, mAccessibilityManager, mStatusBarStateController,
@@ -216,6 +221,7 @@ public class UdfpsController implements DozeReceiver {
 
         @Override
         public void hideUdfpsOverlay(int sensorId) {
+            setNightMode(mNightModeActive, mAutoModeState);
             mFgExecutor.execute(() -> {
                 if (mKeyguardUpdateMonitor.isFingerprintDetectionRunning()) {
                     // if we get here, we expect keyguardUpdateMonitor's fingerprintRunningState
@@ -922,5 +928,22 @@ public class UdfpsController implements DozeReceiver {
          * Called onFingerDown events.
          */
         void onFingerDown();
+    }
+
+    private void disableNightMode() {
+        ColorDisplayManager colorDisplayManager = mContext.getSystemService(ColorDisplayManager.class);
+        mAutoModeState = colorDisplayManager.getNightDisplayAutoMode();
+        mNightModeActive = colorDisplayManager.isNightDisplayActivated();
+        colorDisplayManager.setNightDisplayActivated(false);
+    }
+
+    private void setNightMode(boolean activated, int autoMode) {
+        ColorDisplayManager colorDisplayManager = mContext.getSystemService(ColorDisplayManager.class);
+        colorDisplayManager.setNightDisplayAutoMode(0);
+        if (autoMode == 0) {
+            colorDisplayManager.setNightDisplayActivated(activated);
+        } else if (autoMode == 1 || autoMode == 2) {
+            colorDisplayManager.setNightDisplayAutoMode(autoMode);
+        }
     }
 }
