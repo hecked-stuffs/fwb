@@ -126,10 +126,12 @@
   <!-- Sensor block -->
   <java-symbol type="array" name="config_blockPackagesSensorDrain" />
 
-    <!-- Horizon Light -->
-    <java-symbol type="integer" name="config_AmbientPulseLightColor" />
+  <!-- Horizon Light -->
+  <java-symbol type="integer" name="config_AmbientPulseLightColor" />
 
   <!-- Location indicator -->
   <java-symbol type="drawable" name="stat_sys_location" />
 
+  <!-- Whether to cancel fingerprint operation if not idle -->
+  <java-symbol type="bool" name="config_fpCancelIfNotIdle" />
 </resources>
