@@ -11058,6 +11058,12 @@ public final class Settings {
                 "launcher_taskbar_education_showing";
 
         /**
+         * Whether tethering is allowed to use VPN upstreams
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String TETHERING_ALLOW_VPN_UPSTREAMS = "tethering_allow_vpn_upstreams";
+
+        /**
          * Whether touch hovering is enabled on supported hardware
          * @hide
          */
