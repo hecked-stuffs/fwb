@@ -6058,6 +6058,12 @@ public final class Settings {
         public static final String[] LEGACY_RESTORE_SETTINGS = {
         };
 
+         /**
+         * Settings Dashboard Style
+         * @hide
+         */
+        public static final String SETTINGS_DASHBOARD_STYLE = "settings_dashboard_style";
+
         /**
          * These are all public system settings
          *

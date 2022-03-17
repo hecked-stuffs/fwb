@@ -27,6 +27,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.hardware.fingerprint.FingerprintManager;
+import android.app.AlertDialog;
+import android.app.IActivityManager;
+import android.app.ActivityManager;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.PowerManager;
@@ -232,5 +237,161 @@ public class derpUtils {
         TelephonyManager telephony =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephony != null && telephony.isVoiceCapable();
+    }
+
+    // Check for Chinese language
+    public static boolean isChineseLanguage() {
+       return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
+               Locale.CHINESE.getLanguage());
+    }
+
+    // Check if device has a navbar
+    public static boolean deviceSupportNavigationBar(Context context) {
+        return deviceSupportNavigationBarForUser(context, UserHandle.USER_CURRENT);
+    }
+
+    public static boolean deviceSupportNavigationBarForUser(Context context, int userId) {
+        final boolean showByDefault = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar);
+        final int hasNavigationBar = Settings.System.getIntForUser(
+                context.getContentResolver(),
+                Settings.System.OMNI_NAVIGATION_BAR_SHOW, -1, userId);
+
+        if (hasNavigationBar == -1) {
+            String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
+            if ("1".equals(navBarOverride)) {
+                return false;
+            } else if ("0".equals(navBarOverride)) {
+                return true;
+            } else {
+                return showByDefault;
+            }
+        } else {
+            return hasNavigationBar == 1;
+        }
+    }
+
+    // Method to detect whether an overlay is enabled or not
+    public static boolean isOverlayEnabled(String packageName) {
+        mOverlayService = new OverlayManager();
+        try {
+            List<OverlayInfo> infos = mOverlayService.getOverlayInfosForTarget("android",
+                    UserHandle.myUserId());
+            for (int i = 0, size = infos.size(); i < size; i++) {
+                if (infos.get(i).packageName.equals(packageName)) {
+                    return infos.get(i).isEnabled();
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static class OverlayManager {
+        private final IOverlayManager mService;
+
+        public OverlayManager() {
+            mService = IOverlayManager.Stub.asInterface(
+                    ServiceManager.getService(Context.OVERLAY_SERVICE));
+        }
+
+        public void setEnabled(String pkg, boolean enabled, int userId)
+                throws RemoteException {
+            mService.setEnabled(pkg, enabled, userId);
+        }
+
+        public List<OverlayInfo> getOverlayInfosForTarget(String target, int userId)
+                throws RemoteException {
+            return mService.getOverlayInfosForTarget(target, userId);
+        }
+    }
+
+    public static void restartSystemUi(Context context) {
+        new RestartSystemUiTask(context).execute();
+    }
+
+    public static void showSystemUiRestartDialog(Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.systemui_restart_title)
+                .setMessage(R.string.systemui_restart_message)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        restartSystemUi(context);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private static class RestartSystemUiTask extends AsyncTask<Void, Void, Void> {
+        private Context mContext;
+
+        public RestartSystemUiTask(Context context) {
+            super();
+            mContext = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                ActivityManager am =
+                        (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+                IActivityManager ams = ActivityManager.getService();
+                for (ActivityManager.RunningAppProcessInfo app: am.getRunningAppProcesses()) {
+                    if ("com.android.systemui".equals(app.processName)) {
+                        ams.killApplicationProcess(app.processName, app.uid);
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+   public static void showSettingsRestartDialog(Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.settings_restart_title)
+                .setMessage(R.string.settings_restart_message)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        restartSettings(context);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    public static void restartSettings(Context context) {
+        new restartSettingsTask(context).execute();
+    }
+
+    private static class restartSettingsTask extends AsyncTask<Void, Void, Void> {
+        private Context mContext;
+
+        public restartSettingsTask(Context context) {
+            super();
+            mContext = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                ActivityManager am =
+                        (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+                IActivityManager ams = ActivityManager.getService();
+                for (ActivityManager.RunningAppProcessInfo app: am.getRunningAppProcesses()) {
+                    if ("com.android.settings".equals(app.processName)) {
+                    	ams.killApplicationProcess(app.processName, app.uid);
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
