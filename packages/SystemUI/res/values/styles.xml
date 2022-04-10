@@ -142,7 +142,7 @@
     <style name="TextAppearance.QS.TileLabel.Secondary">
         <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
     </style>
-
+    
     <style name="TextAppearance.QS.UserSwitcher">
         <item name="android:textSize">@dimen/qs_tile_text_size</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
@@ -154,6 +154,12 @@
         <item name="android:fontFamily">@*android:string/config_bodyFontFamilyMedium</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight">20sp</item>
+    </style>
+    
+    <style name="TextAppearance.QS.CustomClock">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:lineHeight">20sp</item>
     </style>
 
