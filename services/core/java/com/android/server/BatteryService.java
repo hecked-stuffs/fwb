@@ -69,8 +69,11 @@ import com.android.server.health.HealthServiceWrapper;
 import com.android.server.lights.LightsManager;
 import com.android.server.lights.LogicalLight;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -169,6 +172,7 @@ public final class BatteryService extends SystemService {
 
     private final String mFastChargeNode;
     private boolean mDashCharger;
+    private boolean mHasDashCharger;
     private boolean mLastDashCharger;
 
     private boolean mWarpCharger;
@@ -221,7 +225,7 @@ public final class BatteryService extends SystemService {
         mActivityManagerInternal = LocalServices.getService(ActivityManagerInternal.class);
 
         mHasDashCharger = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_hasDashCharger);
+                com.android.internal.R.bool.config_hasWarpCharger);
         mHasWarpCharger = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_hasWarpCharger);
         mHasVoocCharger = mContext.getResources().getBoolean(
