@@ -909,7 +909,7 @@ public class KeyguardIndicationController {
         final String percentage = NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
         String batteryInfo = "\n";
         if (mShowBatteryInfo) {
-            batteryInfo += (mChargingCurrent / 1000) + "mA";
+            batteryInfo += (mChargingCurrent / 1) + "mA";
             batteryInfo += " · " + String.format("%.1f", (mChargingVoltage / 1000000)) + "V";
             batteryInfo += " · " +  mTemperature / 10 + "°C";
         }
