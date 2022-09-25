@@ -62,9 +62,9 @@ public class QuickQSPanel extends QSPanel {
         if (mBrightnessView == null) return;
         final MarginLayoutParams lp = (MarginLayoutParams) mBrightnessView.getLayoutParams();
         lp.topMargin = mContext.getResources()
-            .getDimensionPixelSize(R.dimen.qs_brightness_margin_top);
+            .getDimensionPixelSize(R.dimen.qqs_brightness_margin_top);
         lp.bottomMargin = (mSliderAtTop || isLandscape() || !mUsingMediaPlayer)
-            ? mContext.getResources().getDimensionPixelSize(R.dimen.qs_brightness_margin_bottom)
+            ? mContext.getResources().getDimensionPixelSize(R.dimen.qqs_brightness_margin_bottom)
             : 0;
         mBrightnessView.setLayoutParams(lp);
     }
