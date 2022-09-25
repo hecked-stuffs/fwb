@@ -224,9 +224,9 @@ public class QSPanel extends LinearLayout {
         if (mBrightnessView == null) return;
         final MarginLayoutParams lp = (MarginLayoutParams) mBrightnessView.getLayoutParams();
         lp.topMargin = mSliderAtTop ? mContext.getResources()
-            .getDimensionPixelSize(R.dimen.qs_brightness_margin_top) : 0;
+            .getDimensionPixelSize(R.dimen.qs_brightness_margin_top_new) : 0;
         lp.bottomMargin = mContext.getResources()
-            .getDimensionPixelSize(R.dimen.qs_brightness_margin_bottom);
+            .getDimensionPixelSize(R.dimen.qs_brightness_margin_bottom_new);
         mBrightnessView.setLayoutParams(lp);
     }
 
